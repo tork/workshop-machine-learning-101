@@ -7,7 +7,7 @@ function fetch {
     mkdir -p $2 && cd $2 && \
     curl -O $1 && \
     # gunzip -q "*.gz" || : && \
-    if [ -f *.gz ]; then gunzip *.gz; fi && \
+    #if [ -f *.gz ]; then gunzip *.gz; fi && \
     cd ..
 }
 
