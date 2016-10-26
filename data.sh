@@ -3,16 +3,18 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" && \
 mkdir -p data && cd data && \
 echo downloading datasets && \
 
-function fetch_gz {
+function fetch {
     mkdir -p $2 && cd $2 && \
     curl -O $1 && \
-    gunzip *.gz && \
+    # gunzip -q "*.gz" || : && \
+    if [ -f *.gz ]; then gunzip *.gz; fi && \
     cd ..
 }
 
-fetch_gz http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz mnist && \
-fetch_gz http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz mnist && \
-fetch_gz http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz mnist && \
-fetch_gz http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz mnist && \
+fetch http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3.csv titanic && \
+fetch http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz mnist && \
+fetch http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz mnist && \
+fetch http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz mnist && \
+fetch http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz mnist && \
 
 echo done || echo oops
