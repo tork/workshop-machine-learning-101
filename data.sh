@@ -6,7 +6,6 @@ echo downloading datasets && \
 function fetch {
     mkdir -p $2 && cd $2 && \
     curl -O $1 && \
-    if [ -f *.gz ]; then gunzip *.gz; fi && \
     cd ..
 }
 
