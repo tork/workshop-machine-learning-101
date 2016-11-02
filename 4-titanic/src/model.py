@@ -8,6 +8,7 @@ class FFNN(object):
 
     # defines the network in the default graph
     def build(self):
+        pass
         ##############
         ### TASK 2 ###
         ##############
@@ -45,3 +46,8 @@ class FFNN(object):
         #
         ### does it work?
         # try running the test: python -m unittest discover <src-directory>
+        # the test tries to learn from the xor operator. this is a simple
+        # task, and you should use a higher learning rate for the test
+        # than the titanic dataset.
+        # I've been using 0.01 for xor, 0.0005 for titanic. it depends on
+        # your network, variables and preprocessing.

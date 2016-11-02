@@ -16,16 +16,16 @@ class TestFFNN(test_util.TensorFlowTestCase):
         ]
 
         x = np.array(raw, dtype=np.float32)
-        y = np.array(map(lambda x: x[0]^x[1], raw), dtype=x.dtype)[None]
+        y = np.array(map(lambda x: x[0]^x[1], raw), dtype=x.dtype)[:,None]
 
-        model = FFNN(True, 2, 1, dtype=x.dtype)
+        model = FFNN(2)
         model.build()
-        # def __init__(self, is_train, nvars, nclasses, dtype=np.float32, dropout=None):
 
         with tf.Session() as sess:
             sess.run(tf.initialize_all_variables())
-            feed_dict = { model.input: x, model.ideal: y.transpose() }
+            feed_dict = { model.input: x, model.ideal: y }
 
             for _ in xrange(0, 10000):
                 sess.run(model.train, feed_dict=feed_dict)
-            print sess.run(model.y, feed_dict=feed_dict)
+            actual = sess.run(model.y, feed_dict=feed_dict)
+            assert ((actual > 0.5) == y).all()
