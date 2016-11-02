@@ -49,7 +49,6 @@ class FFNN(object):
         ### does it work?
         # try running the test: python -m unittest discover <src-directory>
         # the test tries to learn from the xor operator. this is a simple
-        # task, and you should use a higher learning rate for the test
-        # than the titanic dataset.
-        # I've been using 0.01 for xor, 0.0005 for titanic. it depends on
+        # task, and should be less sensitive to learning rate than titanic.
+        # I've been using lr=0.01 for xor. it really comes down to
         # your network, variables and preprocessing.

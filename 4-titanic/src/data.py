@@ -32,6 +32,12 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
     # look through the csv file and understand how the values are formatted.
     # there is no right or wrong, but preprocessing will impact the learning.
     #
+    # the variables are named as follows:
+    # "pclass","survived","name","sex","age","sibsp","parch",
+    # "ticket","fare", "cabin","embarked","boat","body","home.dest"
+    # dataset description:
+    # http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3info.txt
+    #
     # once variables have been selected and processed, concatenate them
     # into a variable called x
     # x = np.ma.concatenate([fare, sexes], axis=1)
