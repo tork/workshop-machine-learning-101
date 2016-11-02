@@ -12,11 +12,13 @@ print("Setting up variables")
 x = tf.placeholder("float", [None, 784])
 
 # Weights, 784 input x 10 output
-W = tf.Variable(tf.zeros([784,10]))
+W = tf.Variable(tf.random_uniform([784,10], -.01, .01))
+
+#Bias
+b = tf.Variable(tf.zeros([10]))
 
 # Output tensors
-y = tf.nn.softmax(tf.matmul(x,W))
-
+y = tf.nn.softmax(tf.matmul(x,W) + b)
 
 # Expected output
 y_ = tf.placeholder("float", [None,10])
