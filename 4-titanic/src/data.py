@@ -94,6 +94,8 @@ class RawCsvDataset(object):
         if self.data.shape[0] > 1:
             np.random.shuffle(self.data)
 
+    # normalizes the variable name_var by ensuring
+    # zero mean and unit variance (aka. std of 1)
     def normalize(self, name_var, dtype=np.float32):
         # mask nan values
         data = self.data[name_var].astype(dtype)
@@ -106,12 +108,25 @@ class RawCsvDataset(object):
         else:
             stats = self.norm_stats[name_var] = {
                 'mean': data.mean(),
-                'std': data.std()
+                'std': data.std() # (std := standard deviation)
             }
         data -= stats['mean']
         data /= stats['std']
         return data[:,None]
 
+    # this method takes a discrete variable name_var.
+    # first, each discrete value is mapped to an integer value.
+    # next, the one-hot vector is created with the same number of rows
+    # as the dataset, and as many columns as there are unique values.
+    #
+    # let's illustrate with the gender variable:
+    # sex = { male, female }
+    # the number of unique values is two: male and female.
+    # the one-hot vector will therefore have two columns.
+    # every value will be 0, except the row corresponding to each value.
+    # for example, values [[male], [female], [female], [male]] would be transformed
+    # to one-hot vector: [[1, 0], [0, 1], [0, 1], [1, 0]],
+    # given that male maps to 0 and female maps to 1.
     def to_one_hot(self, name_var, dtype=np.float32):
         src = self.data[name_var]
         nsamples = src.shape[0]
