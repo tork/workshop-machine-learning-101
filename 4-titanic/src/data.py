@@ -3,17 +3,24 @@ import csv
 import numpy as np
 
 def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuffle=True):
-    # column_index:variable_name
-    # 0:pclass, 1:survived, 3:sex, 4:age, 5:sibsp, 6:parch, 8:fare, 9:cabin
+    # resolve titanic file path
     path_base = os.path.dirname(os.path.realpath(__file__))
     raw = RawCsvDataset('{}/../../{}'.format(path_base, path), norm_stats=norm_stats, ohot_stats=ohot_stats)
+
+    # shuffling the dataset is good practice, in case the rows are sorted
     if shuffle:
         raw.shuffle()
 
     # survived is our target variable (what we want to model).
     # it is already typed as a binary integer value, and may be used as is
     y = np.ma.array(raw.data.survived)
+    # in python, nan != nan. the following line masks nan values
     y.mask = y != y
+
+    ##############
+    ### TASK 1 ###
+    ##############
+    # 
 
     # certain variables need normalization before use
     age = raw.normalize('age')
@@ -115,17 +122,13 @@ class RawCsvDataset(object):
         nclasses = stats['nclasses']
         mapper = stats['mapper']
 
-        # the + 1 reserves a special class for missing values.
-        # a more commonly used approach is to filter such values out
-        dst = np.zeros([nsamples, nclasses + 1], dtype=dtype)
-        nan = float('nan')
+        dst = np.zeros([nsamples, nclasses], dtype=dtype)
 
         for i in xrange(0, nsamples):
             raw = src[i]
-            if raw != None and raw != nan and raw != '':
+            if raw != None and raw == raw and raw != '':
+
                 c = mapper[raw]
-            else:
-                c = nclasses
-            dst[i][c] = 1
+                dst[i][c] = 1
 
         return dst
