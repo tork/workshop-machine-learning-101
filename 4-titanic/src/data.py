@@ -13,36 +13,53 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
 
     # survived is our target variable (what we want to model).
     # it is already typed as a binary integer value, and may be used as is
-    y = np.ma.array(raw.data.survived)
+    y = np.ma.array(raw.data.survived)[:,None]
     # in python, nan != nan. the following line masks nan values
     y.mask = y != y
 
     ##############
     ### TASK 1 ###
     ##############
-    # 
+    # we need to select and preprocess variables from the raw csv data.
+    # (the output variable survived is already taken care of above.)
+    # for instance, we can normalize the fare variable like this:
+    # fare = raw.normalize('fare')
+    #
+    # some variables should be expanded into one-hot vectors:
+    # sexes = raw.to_one_hot('sex')
+    #
+    # in order to understand what variables to use, and how, you should
+    # look through the csv file and understand how the values are formatted.
+    # there is no right or wrong, but preprocessing will impact the learning.
+    #
+    # once variables have been selected and processed, concatenate them
+    # into a variable called x
+    # x = np.ma.concatenate([fare, sexes], axis=1)
 
-    # certain variables need normalization before use
-    age = raw.normalize('age')
-    sibsp = raw.normalize('sibsp')
-    parch = raw.normalize('parch')
     fare = raw.normalize('fare')
+    sexes = raw.to_one_hot('sex')
+    # more variables?
 
-    # discrete variables should often be expanded to a one-hot vector.
-    # this helps the network discriminate input
-    sex = raw.to_one_hot('sex')
-    pclasses = raw.to_one_hot('pclass').transpose()
-    # assuming there are two genders only, we could also use these values as is
-    sexes = raw.to_one_hot('sex').transpose()
+    # remember to keep this concatenation up to date
+    x = np.ma.concatenate([fare, sexes], axis=1)
 
-    # we have cabin numbers for each passenger, as strings.
-    # perhaps we can use it somehow? eg. extract floor number or placement
-    # cabin = ?
+    # # certain variables need normalization before use
+    # age = raw.normalize('age')
+    # sibsp = raw.normalize('sibsp')
+    # parch = raw.normalize('parch')
+    # fare = raw.normalize('fare')
+    #
+    # # discrete variables should often be expanded to a one-hot vector.
+    # # this helps the network discriminate input
+    # sexes = raw.to_one_hot('sex')
+    # pclasses = raw.to_one_hot('pclass')
+    #
+    # # we have cabin numbers for each passenger, as strings.
+    # # perhaps we can use it somehow? eg. extract floor number or placement
+    # # cabin = ?
 
-    x = np.ma.concatenate([[sibsp], [parch], [fare], pclasses, sexes]).transpose()
-    # x = np.ma.concatenate([[age], [sibsp], [parch], [fare], pclasses, sexes]).transpose()
     x.mask = y.mask = x.mask | y.mask
-    return Dataset(x, y[:,None], norm_stats=raw.norm_stats, ohot_stats=raw.ohot_stats)
+    return Dataset(x, y, norm_stats=raw.norm_stats, ohot_stats=raw.ohot_stats)
 
 
 class Dataset(object):
@@ -103,7 +120,7 @@ class RawCsvDataset(object):
             }
         data -= stats['mean']
         data /= stats['std']
-        return data
+        return data[:,None]
 
     def to_one_hot(self, name_var, dtype=np.float32):
         src = self.data[name_var]
@@ -129,6 +146,6 @@ class RawCsvDataset(object):
             if raw != None and raw == raw and raw != '':
 
                 c = mapper[raw]
-                dst[i][c] = 1
+                dst[i,c] = 1
 
         return dst
