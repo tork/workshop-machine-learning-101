@@ -25,7 +25,7 @@ class TestFFNN(test_util.TensorFlowTestCase):
             sess.run(tf.initialize_all_variables())
             feed_dict = { model.input: x, model.ideal: y }
 
-            for _ in xrange(0, 10000):
+            for _ in xrange(0, 1000):
                 sess.run(model.train, feed_dict=feed_dict)
             actual = sess.run(model.y, feed_dict=feed_dict)
-            assert ((actual > 0.5) == y).all()
+            assert ((actual > 0.5) == y).all(), 'actual:\n{}\nideal:\n{}'.format(actual, y)

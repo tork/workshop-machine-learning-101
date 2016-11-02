@@ -31,10 +31,12 @@ class FFNN(object):
         # in the 0..1 range? look up the sigmoid activation function.
         #
         ### regarding exposed properties
-        # the code expects three properties to be defined:
+        # the code expects some properties to be defined:
         # self.y: the output layer
         # self.loss: the loss (some sort of difference between actual and ideal output)
         # self.train: an operation for training the network (aka. optimizer)
+        # self.input: placeholder for input data
+        # self.ideal: placeholder for ideal data
         #
         # in the mnist example, we used cross entropy as our loss function and
         # gradient descent as training operation.

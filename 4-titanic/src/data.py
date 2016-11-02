@@ -43,21 +43,6 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
     # remember to keep this concatenation up to date
     x = np.ma.concatenate([fare, sexes], axis=1)
 
-    # # certain variables need normalization before use
-    # age = raw.normalize('age')
-    # sibsp = raw.normalize('sibsp')
-    # parch = raw.normalize('parch')
-    # fare = raw.normalize('fare')
-    #
-    # # discrete variables should often be expanded to a one-hot vector.
-    # # this helps the network discriminate input
-    # sexes = raw.to_one_hot('sex')
-    # pclasses = raw.to_one_hot('pclass')
-    #
-    # # we have cabin numbers for each passenger, as strings.
-    # # perhaps we can use it somehow? eg. extract floor number or placement
-    # # cabin = ?
-
     x.mask = y.mask = x.mask | y.mask
     return Dataset(x, y, norm_stats=raw.norm_stats, ohot_stats=raw.ohot_stats)
 
@@ -108,8 +93,7 @@ class RawCsvDataset(object):
         data = self.data[name_var].astype(dtype)
         mask = data != data
         data = np.ma.array(data, mask=mask)
-        data[~mask] = 0
-        data.mask = mask
+        data[mask] = 0
 
         if name_var in self.norm_stats:
             stats = self.norm_stats[name_var]
