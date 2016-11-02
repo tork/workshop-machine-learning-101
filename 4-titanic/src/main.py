@@ -70,8 +70,8 @@ def main():
         loss_test = sess.run(model.loss, feed_dict=feed_test)
         print 'test loss: {}'.format(loss_test)
 
-        # evaluate your own values in data/titanic/custom.csv
-        # dataset_custom = data.titanic('data/titanic/custom.csv', norm_stats=dataset_full.norm_stats, ohot_stats=dataset_full.ohot_stats, shuffle=False)
+        # evaluate your own values in test/custom.csv
+        # dataset_custom = data.titanic('test/custom.csv', norm_stats=dataset_full.norm_stats, ohot_stats=dataset_full.ohot_stats, shuffle=False)
         # feed_custom = { model.input: dataset_custom.x, model.ideal: dataset_custom.y }
         # prediction_custom = sess.run(model.y, feed_dict=feed_custom)
         # print 'predicted survival rate: {}'.format(prediction_custom)
