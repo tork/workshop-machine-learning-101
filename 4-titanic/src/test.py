@@ -28,4 +28,5 @@ class TestFFNN(test_util.TensorFlowTestCase):
             for _ in xrange(0, 10000):
                 sess.run(model.train, feed_dict=feed_dict)
             actual = sess.run(model.y, feed_dict=feed_dict)
+            print actual
             assert ((actual > 0.5) == y).all()
