@@ -23,10 +23,10 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
     # we need to select and preprocess variables from the raw csv data.
     # (the output variable survived is already taken care of above.)
     # for instance, we can normalize the fare variable like this:
-    # fare = raw.normalize('fare')
+    # age = raw.normalize('age')
     #
     # some variables should be expanded into one-hot vectors:
-    # sexes = raw.to_one_hot('sex')
+    # classes = raw.to_one_hot('pclass')
     #
     # in order to understand what variables to use, and how, you should
     # look through the csv file and understand how the values are formatted.
@@ -40,14 +40,14 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
     #
     # once variables have been selected and processed, concatenate them
     # into a variable called x
-    # x = np.ma.concatenate([fare, sexes], axis=1)
+    # x = np.ma.concatenate([age, classes], axis=1)
 
-    fare = raw.normalize('fare')
-    sexes = raw.to_one_hot('sex')
+    age = raw.normalize('age')
+    classes = raw.to_one_hot("pclass")
     # more variables?
 
     # remember to keep this concatenation up to date
-    x = np.ma.concatenate([fare, sexes], axis=1)
+    x = np.ma.concatenate([age, classes], axis=1)
 
     x.mask = y.mask = x.mask | y.mask
     return Dataset(x, y, norm_stats=raw.norm_stats, ohot_stats=raw.ohot_stats)
