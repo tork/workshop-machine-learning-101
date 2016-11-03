@@ -19,7 +19,7 @@ def main():
     dataset_train, dataset_valid = dataset_train.split(0.8)
 
     # create network
-    model = FFNN(dataset_full.nvars, True, dataset_full.nclasses)
+    model = FFNN(dataset_full.nvars)
     model.build()
 
     # a saver is used for storing and restoring the model during training.
@@ -27,7 +27,7 @@ def main():
     # the titanic dataset is tiny, and we can run through the entire thing in
     # a single batch. in other words, the data feed is constant every epoch.
     feed_train = { model.input: dataset_train.x, model.ideal: dataset_train.y }
-    feed_valid = { model.input: dataset_test.x, model.ideal: dataset_test.y }
+    feed_valid = { model.input: dataset_valid.x, model.ideal: dataset_valid.y }
     feed_test = { model.input: dataset_test.x, model.ideal: dataset_test.y }
 
     loss_best = float('inf') # lowest validation loss achieved
@@ -67,11 +67,12 @@ def main():
                     break
         # evaluate final model on the unseen test set.
         # this is the ultimate test on how well the model generalizes.
-        loss_test = sess.run(model.loss, feed_dict=feed_test)
-        print 'test loss: {}'.format(loss_test)
+        loss_test, actual_test = sess.run([model.loss, model.y], feed_dict=feed_test)
+        accuracy_test = (actual_test.round() == dataset_test.y).sum() / float(len(actual_test))
+        print 'test dataset: loss={}, accuracy={}'.format(loss_test, accuracy_test)
 
-        # evaluate your own values in data/titanic/custom.csv
-        # dataset_custom = data.titanic('data/titanic/custom.csv', norm_stats=dataset_full.norm_stats, ohot_stats=dataset_full.ohot_stats, shuffle=False)
+        # evaluate your own values in test/custom.csv
+        # dataset_custom = data.titanic('test/custom.csv', norm_stats=dataset_full.norm_stats, ohot_stats=dataset_full.ohot_stats, shuffle=False)
         # feed_custom = { model.input: dataset_custom.x, model.ideal: dataset_custom.y }
         # prediction_custom = sess.run(model.y, feed_dict=feed_custom)
         # print 'predicted survival rate: {}'.format(prediction_custom)
