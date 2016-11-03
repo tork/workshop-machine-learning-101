@@ -10,7 +10,7 @@ class FFNN(object):
     def build(self):
         pass
         ##############
-        ### TASK 2 ###
+        ### TASK 1 ###
         ##############
         # define your network!
         # you can try to create it by memory, but it might be appropriate

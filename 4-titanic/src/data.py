@@ -18,7 +18,7 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
     y.mask = y != y
 
     ##############
-    ### TASK 1 ###
+    ### TASK 2 ###
     ##############
     # we need to select and preprocess variables from the raw csv data.
     # (the output variable survived is already taken care of above.)
