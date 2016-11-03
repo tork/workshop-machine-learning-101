@@ -7,6 +7,7 @@ def main():
     tensors()
     variables()
     placeholders()
+    fill_in_the_blanks()
 
 def tensors():
     # although the syntax can be mistaken for arrays,
@@ -114,6 +115,35 @@ def placeholders():
     data[0] = 0
     eval_quadruple = sess.run(quadruple, feed_dict=feed_dict)
     assert (eval_quadruple == [0, 8, 12, 16, 20]).all()
+
+def fill_in_the_blanks():
+    sess = tf.Session()
+
+    a = tf.constant([1, 2, 3])
+    b = tf.constant([4, 5, 6])
+    op = tf.no_op # change me!
+    assert (sess.run(op) == [4, 10, 18]).all()
+
+    c = tf.constant([2, 4, 6])
+    op = tf.no_op # change me!
+    assert sess.run(op) == 12
+
+    a = tf.constant([
+        [1],
+        [2],
+        [3]
+    ])
+    b = tf.constant([
+        [1, 2, 3]
+    ])
+    # hint: this is matrix multiplication (aka. the "dot product")
+    ideal = [
+        [1, 2, 3],
+        [2, 4, 6],
+        [3, 6, 9],
+    ]
+    op = tf.no_op # change me!
+    assert (sess.run(op) == ideal).all()
 
 
 if __name__ == '__main__':
