@@ -2,53 +2,92 @@ import numpy as np
 import tensorflow as tf
 
 class FFNN(object):
-    def __init__(self, nvars):
+    def __init__(self, nvars, nout):
         super(FFNN, self).__init__()
         self.nvars = nvars
+        self.nout = nout
 
-    # defines the network in the default graph
     def build(self):
         pass
+        
+
+        # <Your code goes here>
+
+
         ##############
         ### TASK 1 ###
-        ##############
-        # define your network!
-        # you can try to create it by memory, but it might be appropriate
-        # to copy the network you defined for mnist over.
+        # Define your network! Hint: Adapt the model code from the MNIST problem.
+        # The same network can be used here, as long as you get the layer sizes right.
+        # You only need to define the network and training operations;
+        # loading data and training the model is taken care of in main.py.
         #
-        # the number of input variables is stored in self.nvars.
+        # The network will model whether or not a passenger survived Titanic.
         #
-        ### regarding the output layer
-        # this network only has one output neuron: whether the passenger
-        # survives or not (the mnist net had 10 output neurons).
+        # Predefined properties:
+        # self.nvars: the number of input variables
+        # self.nout: the number of output neurons
         #
-        # since we have only one output neuron, we can't use softmax on the
-        # final layer: softmax ensures the output sums to one, meaning our
-        # single neuron would always output 1.0.
-        #
-        # hint:
-        # the ideal values are 0 or 1, so perhaps the output should also lie
-        # in the 0..1 range? look up the sigmoid activation function.
-        #
-        ### regarding exposed properties
-        # the code expects some properties to be defined:
-        # self.y: the output layer
-        # self.loss: the loss (some sort of difference between actual and ideal output)
-        # self.train: an operation for training the network (aka. optimizer)
+        # Some properties need to be set, in order for the code to work:
         # self.input: placeholder for input data
+        # self.output: the output layer
+        # self.mean_loss: the mean loss (mean distance between actual and ideal output)
+        # self.train: an operation for training the network (aka. optimizer)
         # self.ideal: placeholder for ideal data
+        # A property can be set like so: self.some_number = 123
         #
-        # in the mnist example, we used cross entropy as our loss function and
-        # gradient descent as training operation.
-        # as mentioned, this problem is slightly different because we only have
-        # one output. the loss function can simply be the difference between
-        # ideal and actual output, squared and summed.
-        # self.loss = (actual - ideal) ^ 2 # this is pseudocode, ^ is actually xor in python
-        # self.train = gradient descent
+        # Want to verify that your implementation works?
+        # Try running the test: python -m unittest discover <src-directory>
+        # The test tries to learn from the AND and XOR operators.
+        # Any network should ideally be able to learn AND.
+        # Only networks with one or more hidden layers are able to learn XOR.
+        # We recommend using a learning rate of 0.1 for the tests.
         #
-        ### does it work?
-        # try running the test: python -m unittest discover <src-directory>
-        # the test tries to learn from the xor operator. this is a simple
-        # task, and should be less sensitive to learning rate than titanic.
-        # I've been using lr=0.01 for xor. it really comes down to
-        # your network, variables and preprocessing.
+        # Once the AND-test is working, try learning from the Titanic dataset:
+        # ./src/main.py
+
+        ##############
+        ### TASK 2 ###
+        # With a working network in place, try getting the XOR-test to run by
+        # adding a hidden layer. A hidden layer is created similarly
+        # to the output layer, with it's own weights and bias. The data should
+        # then flow from the input layer, through the hidden,
+        # before reaching the output layer.
+        # Hint: Use tf.nn.relu as the hidden layer activation function.
+        # The hidden layer network should perform similarly to the regular one,
+        # when applied to the Titanic dataset.
+
+        ##############
+        ### TASK 3 ###
+        # Try adjusting the learning rate, and see how it impacts learning.
+        # Because neural nets are initialized randomly, you should probably
+        # train about 10 models and take the average accuracy for it to mean
+        # something.
+        # If 10 samples takes too long, feel free to use a lower number.
+        # Start training by running ./src/main.py
+
+        ##############
+        ### TASK 4 ###
+        # What input variables does the model pick up on? Are there some that
+        # don't matter? Try to comment out one variable at a time, to see
+        # how it affects the networks ability to learn. The variables can be
+        # found in src/data.py, around line 19.
+
+        ##############
+        ### TASK 5 ###
+        # What does your network think of your own chances of surviving Titanic?
+        # Enter your own details in test/custom.csv.
+        # Here is an example:
+        # "pclass","sex","age","sibsp","parch"
+        # 1,male,26,1,2
+        # Add as many rows as you wish.
+        # In src/main.py, uncomment lines 75 through 82.
+        # Start training the model, and read your survival chances!
+        # 1.0 = live to tell the tale, 0.0 = dead as a dodo.
+
+        #############
+        ### BONUS ###
+        # See if you can improve the accuracy by making other changes to the
+        # network. Things to try:
+        # Adjust the number of hidden neurons
+        # Use a different optimizer (other than gradient descent)
+        # See how adding more layers affects learning

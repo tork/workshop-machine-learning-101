@@ -1,1 +1,1 @@
-"pclass","survived","name","sex","age","sibsp","parch","ticket","fare","cabin","embarked","boat","body","home.dest"
+"pclass","sex","age","sibsp","parch"

@@ -2,7 +2,7 @@ import os
 import csv
 import numpy as np
 
-def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuffle=True):
+def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuffle=True, read_ideal=True):
     # resolve titanic file path
     path_base = os.path.dirname(os.path.realpath(__file__))
     raw = RawCsvDataset('{}/../../{}'.format(path_base, path), norm_stats=norm_stats, ohot_stats=ohot_stats)
@@ -11,43 +11,26 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
     if shuffle:
         raw.shuffle()
 
-    # survived is our target variable (what we want to model).
-    # it is already typed as a binary integer value, and may be used as is
-    y = np.ma.array(raw.data.survived)[:,None]
+    # The Titanic dataset and all it's variables is described here:
+    # http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3info.txt
+    # We have only included some of the most interesting here.
+
+    x = np.ma.concatenate([
+        raw.to_one_hot('pclass'), # passenger class
+        raw.to_one_hot('sex'), # sex
+        raw.normalize('age'), # age
+        raw.normalize('sibsp'), # number of sibling/sposes aboard
+        raw.normalize('parch') # number of parents/children aboard
+    ], axis=1)
+
+    if read_ideal:
+        # survived is our target variable (what we want to model).
+        # it is already typed as a binary integer value, and may be used as is
+        y = np.ma.array(raw.data.survived)[:,None]
+    else:
+        y = np.ma.array([0.0] * x.shape[0])[:,None]
     # in python, nan != nan. the following line masks nan values
     y.mask = y != y
-
-    ##############
-    ### TASK 2 ###
-    ##############
-    # we need to select and preprocess variables from the raw csv data.
-    # (the output variable survived is already taken care of above.)
-    # for instance, we can normalize the fare variable like this:
-    # age = raw.normalize('age')
-    #
-    # some variables should be expanded into one-hot vectors:
-    # classes = raw.to_one_hot('pclass')
-    #
-    # in order to understand what variables to use, and how, you should
-    # look through the csv file and understand how the values are formatted.
-    # there is no right or wrong, but preprocessing will impact the learning.
-    #
-    # the variables are named as follows:
-    # "pclass","survived","name","sex","age","sibsp","parch",
-    # "ticket","fare", "cabin","embarked","boat","body","home.dest"
-    # dataset description:
-    # http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3info.txt
-    #
-    # once variables have been selected and processed, concatenate them
-    # into a variable called x
-    # x = np.ma.concatenate([age, classes], axis=1)
-
-    age = raw.normalize('age')
-    classes = raw.to_one_hot("pclass")
-    # more variables?
-
-    # remember to keep this concatenation up to date
-    x = np.ma.concatenate([age, classes], axis=1)
 
     x.mask = y.mask = x.mask | y.mask
     return Dataset(x, y, norm_stats=raw.norm_stats, ohot_stats=raw.ohot_stats)
@@ -58,7 +41,7 @@ class Dataset(object):
         super(Dataset, self).__init__()
         assert x.shape[0] == y.shape[0]
         self.nvars = x.shape[1]
-        self.nclasses = y.max()
+        self.nout = y.max()
         self.x = x
         self.y = y
         self.norm_stats = norm_stats

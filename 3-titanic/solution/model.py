@@ -2,73 +2,96 @@ import numpy as np
 import tensorflow as tf
 
 class FFNN(object):
-    def __init__(self, nvars, is_train=True, nclasses=1, dtype=np.float32, dropout=None):
+    def __init__(self, nvars, nout):
         super(FFNN, self).__init__()
-        self.is_train = is_train
         self.nvars = nvars
-        self.nclasses = nclasses;
-        self.dtype = tf.as_dtype(dtype)
-        self.dropout = dropout
+        self.nout = nout
 
-    # defines the network in the default graph
     def build(self):
-        self.build_inference()
-        self.build_loss()
-        if self.is_train:
-            # print 'choo choo!'
-            self.build_train()
 
-    def build_inference(self):
-        # create a variable for controlling dropout
-        if self.dropout:
-            self.keep_prob = tf.get_variable(
-                'keep_prob',
-                shape=[],
-                initializer=tf.constant_initializer(1.0 - self.dropout),
-                dtype=self.dtype)
+        self.input = x = tf.placeholder('float', [None, self.nvars])
+        W = tf.Variable(tf.random_uniform([self.nvars, 1]))
+        b = tf.Variable(tf.zeros([1]))
+        self.output = y = tf.sigmoid(tf.matmul(x, W) + b)
+        self.ideal = y_ = tf.placeholder('float', [None, 1])
+        loss = squared_error = tf.pow(y - y_, 2)
+        self.mean_loss = mean_error = tf.reduce_mean(squared_error)
+        self.train = train = tf.train.GradientDescentOptimizer(0.1).minimize(squared_error)
 
-        def build_layer(name, size, prev_layer, a=tf.nn.relu):
-            with tf.variable_scope(name) as scope:
-                # in the literature, certain naming conventions exist:
-                # w: weights between layers
-                # b: bias values for each neuron in this layer
-                # a: activation function used for each neuron in this layer
-                w = tf.get_variable(
-                    'w',
-                    shape=[prev_layer.get_shape().as_list()[1], size],
-                    initializer=tf.truncated_normal_initializer(stddev=0.05, dtype=self.dtype),
-                    dtype=self.dtype)
-                b = tf.get_variable(
-                    'b',
-                    shape=[size],
-                    initializer=tf.constant_initializer(0.1, dtype=self.dtype),
-                    dtype=self.dtype)
+        ##############
+        ### TASK 1 ###
+        # Define your network! Hint: Adapt the model code from the MNIST problem.
+        # The same network can be used here, as long as you get the layer sizes right.
+        # You only need to define the network and training operations;
+        # loading data and training the model is taken care of in main.py.
+        #
+        # The network will model whether or not a passenger survived Titanic.
+        #
+        # Predefined properties:
+        # self.nvars: the number of input variables
+        # self.nout: the number of output neurons
+        #
+        # Some properties need to be set, in order for the code to work:
+        # self.input: placeholder for input data
+        # self.output: the output layer
+        # self.mean_loss: the mean loss (mean distance between actual and ideal output)
+        # self.train: an operation for training the network (aka. optimizer)
+        # self.ideal: placeholder for ideal data
+        # A property can be set like so: self.some_number = 123
+        #
+        # Want to verify that your implementation works?
+        # Try running the test: python -m unittest discover <src-directory>
+        # The test tries to learn from the AND and XOR operators.
+        # Any network should ideally be able to learn AND.
+        # Only networks with one or more hidden layers are able to learn XOR.
+        # We recommend using a learning rate of 0.1 for the tests.
+        #
+        # Once the AND-test is working, try learning from the Titanic dataset:
+        # ./src/main.py
 
-                # activation function a takes bias plus previous layer values
-                # multiplied by their weights.
-                layer = a(tf.matmul(prev_layer, w) + b, name=name)
+        ##############
+        ### TASK 2 ###
+        # With a working network in place, try getting the XOR-test to run by
+        # adding a hidden layer. A hidden layer is created similarly
+        # to the output layer, with it's own weights and bias. The data should
+        # then flow from the input layer, through the hidden,
+        # before reaching the output layer.
+        # Hint: Use tf.nn.relu as the hidden layer activation function.
+        # The hidden layer network should perform similarly to the regular one,
+        # when applied to the Titanic dataset.
 
-                # if applicable, enable dropout
-                if self.dropout != None:
-                    layer = tf.nn.dropout(layer, self.keep_prob)
-                return layer
+        ##############
+        ### TASK 3 ###
+        # Try adjusting the learning rate, and see how it impacts learning.
+        # Because neural nets are initialized randomly, you should probably
+        # train about 10 models and take the average accuracy for it to mean
+        # something.
+        # If 10 samples takes too long, feel free to use a lower number.
+        # Start training by running ./src/main.py
 
-        self.input = tf.placeholder(dtype=self.dtype, shape=[None, self.nvars], name='input')
-        layer = build_layer('h0', 100, self.input)
-        layer = build_layer('h1', 50, layer)
-        self.logits = build_layer('logits', self.nclasses, layer, tf.identity)
-        self.y = tf.sigmoid(self.logits, name='y')
+        ##############
+        ### TASK 4 ###
+        # What input variables does the model pick up on? Are there some that
+        # don't matter? Try to comment out one variable at a time, to see
+        # how it affects the networks ability to learn. The variables can be
+        # found in src/data.py, around line 19.
 
-    def build_loss(self):
-        # placeholder for ideal values
-        self.ideal = tf.placeholder(dtype=self.dtype, shape=self.y.get_shape(), name='ideal')
+        ##############
+        ### TASK 5 ###
+        # What does your network think of your own chances of surviving Titanic?
+        # Enter your own details in test/custom.csv.
+        # Here is an example:
+        # "pclass","sex","age","sibsp","parch"
+        # 1,male,26,1,2
+        # Add as many rows as you wish.
+        # In src/main.py, uncomment lines 75 through 82.
+        # Start training the model, and read your survival chances!
+        # 1.0 = live to tell the tale, 0.0 = dead as a dodo.
 
-        # the learning algorithm needs a value to minimize. in this example, we simply
-        # use the squared difference between ideal and actual (self.y) values
-        self.squared_error = tf.pow(self.y - self.ideal, 2)
-        self.loss = tf.reduce_sum(self.squared_error)
-
-    def build_train(self):
-        global_step = tf.Variable(0, trainable=False)
-        lr = tf.train.exponential_decay(0.0005, global_step, 500, 0.96, staircase=False)
-        self.train = tf.train.GradientDescentOptimizer(lr).minimize(self.loss)
+        #############
+        ### BONUS ###
+        # See if you can improve the accuracy by making other changes to the
+        # network. Things to try:
+        # Adjust the number of hidden neurons
+        # Use a different optimizer (other than gradient descent)
+        # See how adding more layers affects learning
