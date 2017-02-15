@@ -1,1 +1,0 @@
-MNIST-implementation in Tensorflow

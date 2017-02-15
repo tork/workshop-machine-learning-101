@@ -28,7 +28,7 @@ SOURCE_URL = 'http://yann.lecun.com/exdb/mnist/'
 def maybe_download(filename, work_directory):
   """Download the data from Yann's website, unless it's already here."""
   if not os.path.exists(work_directory):
-    os.mkdir(work_directory)
+    os.makedirs(work_directory)
   filepath = os.path.join(work_directory, filename)
   if not os.path.exists(filepath):
     filepath, _ = urllib.request.urlretrieve(SOURCE_URL + filename, filepath)
