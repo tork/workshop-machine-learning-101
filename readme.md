@@ -22,7 +22,9 @@ Installer Docker eller Docker Toolbox. Dersom du kjører Windows, må du godkjen
 Høyreklikk på Docker-ikonet i taskbaren, gå til settings. Under "Shared Drives", huk av partisjonen som inneholder koden.
 
 Åpne prosjektmappen og kjør et av env-scriptene, avhengig av konfigurasjon:
+
 OS|Docker|Script
+---|---|---
 Linux/macOS|Native|env-native.sh
 Linux/macOS|Toolbox|env-toolbox.sh
 Windows|Native|env-native.ps1
