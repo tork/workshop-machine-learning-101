@@ -1,4 +1,4 @@
-# Maskinlæring 101
+﻿# Maskinlæring 101
 Denne workshopen tar for seg maskinlæring, eksemplifisert gjennom nevrale nettverk og [Tensorflow](https://www.tensorflow.org).
 
 Workshopen består av flere moduler, organisert i nummererte kataloger.
@@ -6,12 +6,20 @@ Workshopen består av flere moduler, organisert i nummererte kataloger.
 ## Forberedelser
 Miljøet må gjøres klart, og data lastes ned på forhånd.
 
-### Miljø
-Workshopen tar utgangspunkt i Python og Tensorflow. Som et forsøk på å minimere feil hos deltakerne, har jeg lagt inn en kommando som kjører opp et [Docker](https://www.docker.com)-image. Installer Docker. Dersom du kjører Windows, må du godkjenne partisjonen prosjektet ligger på for deling:
+### Docker
+Workshopen tar utgangspunkt i Python og Tensorflow. For å ha bedre kontroll på utviklermiljøet, er det lagt opp til bruk av Docker lokalt. Om mulig, installer en native Docker-versjon. Eldre versjoner av Windows og macOS må kjøre Docker virtuelt, med Docker Toolbox. Noen nye versjoner av Windows mangler også Hyper-V, og vil ikke kunne kjøre Docker native. Har du ikke Windows 10 Professional/Enterprise 64-bit eller bedre, må Docker Toolbox benyttes.
+
+Installer Docker eller Docker Toolbox. Dersom du kjører Windows, må du godkjenne partisjonen prosjektet ligger på for deling:
 Høyreklikk på Docker-ikonet i taskbaren, gå til settings. Under "Shared Drives", huk av partisjonen som inneholder koden.
-Åpne en terminal og kjør `env.sh` eller `env.ps1` for henholdsvis Linux/macOS eller Windows.
+
+Åpne prosjektmappen og kjør et av env-scriptene, avhengig av konfigurasjon:
+OS|Docker|Script
+Linux/macOS|Native|env-native.sh
+Linux/macOS|Toolbox|env-toolbox.sh
+Windows|Native|env-native.ps1
+WindowsToolbox|env-toolbox.ps1
 
 Sjekk at containeren starter uten problemer, og at du kommer inn i et shell. Verifiser at prosjektmappen ligger tilgjengelig på `/workshop-machine-learning-101`. Det er viktig at dette steget blir utført i forkant av workshopen, slik at du har imaget klart lokalt.
 
 ### Data
-Datasettene som blir brukt lastes ned ved å kjøre `data.sh`. Scriptet er kjørbart fra utviklermiljøet i Docker-containeren fra steget over, men bør også fungere i macOS. Sjekk at data lastes ned uten feil, og at scriptet avslutter ved å skrive `done`.
+Datasettene som blir brukt lastes ned ved å kjøre `data.sh`. Scriptet er kjørbart fra utviklermiljøet i Docker-containeren fra steget over, men skal også fungere i macOS. Sjekk at data lastes ned uten feil, og at scriptet avslutter ved å skrive `done`.
