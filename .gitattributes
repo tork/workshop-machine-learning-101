@@ -1,0 +1,4 @@
+*.sh text
+*.py text
+
+* text=auto
