@@ -28,6 +28,8 @@ Linux/macOS|Toolbox|env-toolbox.sh
 Windows|Native|env-native.ps1
 Windows|Toolbox|env-toolbox.ps1
 
+`env-toolbox.ps1` må kjøres som administrator (start Powershell som administrator og kjør scriptet derfra). Årsaken er at man trenger admin for å hente info om Hyper-V.
+
 Sjekk at containeren starter uten problemer, og at du kommer inn i et shell. Verifiser at prosjektmappen ligger tilgjengelig på `/workshop-machine-learning-101`. Det er viktig at dette steget blir utført i forkant av workshopen, slik at du har imaget klart lokalt.
 
 ### Data
