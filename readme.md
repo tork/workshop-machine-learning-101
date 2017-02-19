@@ -21,6 +21,7 @@ NB: Om Docker Toolbox skal benyttes, trenger man en driver for virtualisering. I
 Installer Docker eller Docker Toolbox. Dersom du kjører Windows, må du godkjenne partisjonen prosjektet ligger på for deling:
 Høyreklikk på Docker-ikonet i taskbaren, gå til settings. Under "Shared Drives", huk av partisjonen som inneholder koden.
 
+### Miljø
 Åpne prosjektmappen og kjør et av env-scriptene, avhengig av konfigurasjon:
 
 OS|Docker|Script
