@@ -19,7 +19,7 @@ def titanic(path='data/titanic/titanic3.csv', norm_stats={}, ohot_stats={}, shuf
         raw.to_one_hot('pclass'), # passenger class
         raw.to_one_hot('sex'), # sex
         raw.normalize('age'), # age
-        raw.normalize('sibsp'), # number of sibling/sposes aboard
+        raw.normalize('sibsp'), # number of sibling/spouses aboard
         raw.normalize('parch') # number of parents/children aboard
     ], axis=1)
 

@@ -9,7 +9,7 @@ class FFNN(object):
 
     def build(self):
         pass
-        
+
 
         # <Your code goes here>
 
@@ -52,6 +52,7 @@ class FFNN(object):
         # to the output layer, with it's own weights and bias. The data should
         # then flow from the input layer, through the hidden,
         # before reaching the output layer.
+        # Tests are run like so: python -m unittest discover <src-directory>
         # Hint: Use tf.nn.relu as the hidden layer activation function.
         # The hidden layer network should perform similarly to the regular one,
         # when applied to the Titanic dataset.
