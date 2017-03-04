@@ -72,7 +72,7 @@ def main():
         print 'test dataset: loss={}, accuracy={}'.format(loss_test, accuracy_test)
 
         # evaluate your own values in test/custom.csv
-        dataset_custom = data.titanic('test/custom.csv',
+        # dataset_custom = data.titanic('test/custom.csv',
         #     norm_stats=dataset_full.norm_stats,
         #     ohot_stats=dataset_full.ohot_stats,
         #     shuffle=False,
