@@ -1,28 +1,26 @@
-﻿# Maskinlæring 101
-Denne workshopen tar for seg maskinlæring, eksemplifisert gjennom nevrale nettverk og [Tensorflow](https://www.tensorflow.org).
+# Machine learning 101
+This workshop uses machine learning, exemplified through neural networks and [Tensorflow](https://www.tensorflow.org).
 
-Workshopen består av flere moduler, organisert i nummererte kataloger.
+## Prerequisites
+The environment has to be prepared and data downloaded on before hand.
 
-## Forberedelser
-Miljøet må gjøres klart, og data lastes ned på forhånd.
-
-### Klon repo
-Vi kommer til å kjøre koden i Linux. Siden Windows bruker et ekstra tegn for å indikere slutten på en linje, må Windows-brukere kjøre følgende kommando før repo clones:
+### Clone repository
+We will be running the code in Linux. Since Windows uses an extra character to denote the end of a line, Windows users should run the following command prior to cloning the repo:
 `git config --global core.autocrlf false`
-Git har mulighet til å legge på det ekstra tegnet automatisk når man cloner et repo. Dette er ikke ønskelig her, så vi deaktiverer det ved å si `false` som angitt over.
 
-Nå kan du clone koden: `git clone https://github.com/tork/workshop-machine-learning-101.git`
+Git is capable of adding the additional character automatically upon cloning. That functionality is not necessary/wanted here, so we deactivate it by using the above command.
+
+You can now clone the workshop project: `git clone https://github.com/tork/workshop-machine-learning-101.git`
 
 ### Docker
-Workshopen tar utgangspunkt i Python og Tensorflow. For å ha bedre kontroll på utviklermiljøet, er det lagt opp til bruk av Docker lokalt. Om mulig, installer en native Docker-versjon. Eldre versjoner av Windows og macOS må kjøre Docker virtuelt, med Docker Toolbox. Noen nye versjoner av Windows mangler også Hyper-V, og vil ikke kunne kjøre Docker native. Har du ikke Windows 10 Professional/Enterprise 64-bit eller bedre, må Docker Toolbox benyttes.
+In order to make sure everyone is running compatible versions of Python and Tensorflow, we recommend using Docker and provided scripts to enter an environment prepared for running the workshop code. Note that there are two versions of Docker: A native client simply called "Docker for <your OS here>" (hereby Docker native), or Docker Toolbox. Docker Toolbox runs virtualized, while Docker native runs... natively. Since there are less moving parts using Docker native, I recommend using that if your OS supports it. Typically, Windows versions below 10 or home editions must use Toolbox, while most other can use native. Consult the Docker website for more information.
 
-NB: Om Docker Toolbox skal benyttes, trenger man en driver for virtualisering. I utgangspunktet er dette Virtualbox, og installeres sammen med Docker Toolbox. Noen Windows vil ha Hyper-V installert, og Docker Toolbox støtter å bruke Hyper-V som driver. Selv opplevde jeg noen problemer med den kombinasjonen. Hvis du møter problemer med Hyper-V og Docker Toolbox, prøv å deaktiver Hyper-V og følg resten av readme-en som vanlig.
+Docker Toolbox requires a virtualization driver to work. I had some issues using Windows Hyper-V in my tests. If you can't use Docker native, and are having trouble with Hyper-V, try disabling it completely before following the rest of this readme as usual.
 
-Installer Docker eller Docker Toolbox. Dersom du kjører Windows, må du godkjenne partisjonen prosjektet ligger på for deling:
-Høyreklikk på Docker-ikonet i taskbaren, gå til settings. Under "Shared Drives", huk av partisjonen som inneholder koden.
+Install Docker native or Docker Toolbox. If you run Windows, you would need to explicitly allow sharing from the volume you keep the workshop code: Right click the Docker icon in the task bar, go to settings. Under "Shared Drives", check the partition which contain the workshop project.
 
-### Miljø
-Åpne prosjektmappen og kjør et av env-scriptene, avhengig av konfigurasjon:
+### environment
+Open the workshop project directory and run one of the provided scripts, depending on your configuration:
 
 OS|Docker|Script
 ---|---|---
@@ -31,9 +29,14 @@ Linux/macOS|Toolbox|env-toolbox.sh
 Windows|Native|env-native.ps1
 Windows|Toolbox|env-toolbox.ps1
 
-`env-toolbox.ps1` må kjøres som administrator (start Powershell som administrator og kjør scriptet derfra). Årsaken er at man trenger admin for å hente info om Hyper-V.
+Some versions of Windows disallows running Powershell scripts by default. If this happens to you, you need to allow running scripts. Start a Powershell session as administrator, and run the following command:
+`Set-ExecutionPolicy Unrestricted`
+This will allow running all scripts. I guess you would want to revert the setting once the workshop is done (`Restricted` is the default setting):
+`Set-ExecutionPolicy Restricted`
 
-Sjekk at containeren starter uten problemer, og at du kommer inn i et shell. Verifiser at prosjektmappen ligger tilgjengelig på `/workshop-machine-learning-101`. Det er viktig at dette steget blir utført i forkant av workshopen, slik at du har imaget klart lokalt.
+`env-toolbox.ps1` has to be run as administrator (start Powershell as administrator and run the script from here). The reason is that we need admin for fetching information regarding Hyper-V.
+
+Check that the environment container starts without issues, and that you are put in a shell. Verify that the project directory is mountet on path `/workshop-machine-learning-101`.
 
 ### Data
-Datasettene som blir brukt lastes ned ved å kjøre `data.sh`. Scriptet er kjørbart fra utviklermiljøet i Docker-containeren fra steget over, men skal også fungere i macOS. Sjekk at data lastes ned uten feil, og at scriptet avslutter ved å skrive `done`.
+Data sets should be downloaded prior to solving any of the problems in this workshop. Do this by running `data.sh`. The script is runnable from the Docker container you should have running, but would also be usable with for instance macOS. Verify that data is being downloaded, and that the script prints `done` upon termination.
