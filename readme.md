@@ -19,7 +19,7 @@ Docker Toolbox requires a virtualization driver to work. I had some issues using
 
 Install Docker native or Docker Toolbox. If you run Windows, you would need to explicitly allow sharing from the volume you keep the workshop code: Right click the Docker icon in the task bar, go to settings. Under "Shared Drives", check the partition which contain the workshop project.
 
-### environment
+### Environment
 Open the workshop project directory and run one of the provided scripts, depending on your configuration:
 
 OS|Docker|Script
