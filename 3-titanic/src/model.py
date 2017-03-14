@@ -60,10 +60,10 @@ class FFNN(object):
         ##############
         ### TASK 3 ###
         # Try adjusting the learning rate, and see how it impacts learning.
-        # Because neural nets are initialized randomly, you should probably
+        # Because neural nets are initialized randomly, you should ideally
         # train about 10 models and take the average accuracy for it to mean
-        # something.
-        # If 10 samples takes too long, feel free to use a lower number.
+        # something. Running 10 times may be tedious, but try running at least
+        # a couple of times in order to get a feeling of it.
         # Start training by running ./src/main.py
 
         ##############
@@ -92,3 +92,5 @@ class FFNN(object):
         # Adjust the number of hidden neurons
         # Use a different optimizer (other than gradient descent)
         # See how adding more layers affects learning
+        # Try adding a hidden layer and other improvements to the mnist problem.
+        # You might find that mnist responds better to the hidden layer.
