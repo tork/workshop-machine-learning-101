@@ -13,7 +13,7 @@ class TestFFNN(test_util.TensorFlowTestCase):
     def test_xor(self):
         self.assert_model(lambda x: x[0]^x[1])
 
-    def assert_model(self, reducer, epochs=5000):
+    def assert_model(self, reducer, epochs=10000):
         raw = [
             [0, 0],
             [0, 1],
